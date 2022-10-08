@@ -2,8 +2,8 @@
 My environment setup using ansible
 
 ## Pre-requirements  
-some [dotfiles](https://github.com/uelei/dotfiles) repo to be used (using stow)
-change all variables on vars/vars.yml
+- [Dotfiles](https://github.com/uelei/dotfiles) repo to be used (using stow)  
+- Change all variables on vars/vars.yml
 
 ## To run  
  
