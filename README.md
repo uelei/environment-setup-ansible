@@ -1,6 +1,28 @@
 # environment-setup-ansible  
 My environment setup using ansible
 
+Currently installing
+
+- basic
+  - neovim
+  - stow
+  - kitty
+  - htop
+  - starship(terminal)
+- pyenv
+  - pipx
+  - poetry
+- gvm
+  - go 1.7.1
+  - go 1.19.2
+- nvm 
+  - node lts
+- rust
+  - bat
+- tfenv
+- kubectl
+
+
 ## Pre-requirements  
 - [Dotfiles](https://github.com/uelei/dotfiles) repo to be used (using stow)  
 - Change all variables on vars/vars.yml
