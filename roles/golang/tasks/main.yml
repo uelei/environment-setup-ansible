@@ -1,0 +1,28 @@
+---
+# tasks file for gvm
+- name: Run the equivalent of "apt-get update" as a separate step
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install pyenv requirements
+  apt: name={{ item }} state=present
+  with_items:
+    - gcc
+    - bison
+    - build-essential
+    - make
+    - binutils
+
+- name: Install gvm
+  become_user: '{{ user }}'
+  shell: >
+    curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
+  args:
+    creates: "/home/{{ user }}/.gvm/bin/gvm"
+
+- name: Install go
+  become_user: '{{ user }}'
+  shell: source /home/{{ user }}/.gvm/scripts/gvm && gvm install go1.7.1 -B && gvm use go1.7.1 && export GOROOT_BOOTSTRAP=$GOROOT && gvm install go1.19.2 && gvm use go1.19.2 --default
+  args:
+    executable: /bin/bash
+    creates: "/home/{{ user }}/.gvm/environments/go1.19.2"

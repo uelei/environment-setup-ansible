@@ -1,0 +1,59 @@
+---
+# tasks file for pyenv
+- name: Run the equivalent of "apt-get update" as a separate step
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install pyenv requirements
+  apt: name={{ item }} state=present
+  with_items:
+    - git
+    - make
+    - build-essential
+    - libssl-dev
+    - zlib1g-dev
+    - libbz2-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - wget
+    - curl
+    - llvm
+    - libncursesw5-dev
+    - xz-utils
+    - tk-dev
+    - libxml2-dev
+    - libxmlsec1-dev
+    - libffi-dev
+    - liblzma-dev
+    - python3-dev
+    - python3-venv
+    - python3-pip
+
+- name: Check if pyenv exists
+  ansible.builtin.stat:
+    path: /home/{{ user }}/.pyenv
+  register: pyenv_exists
+
+- name: Install pyenv
+  become: yes
+  become_user: '{{ user }}'
+  become_method: su
+  shell: curl https://pyenv.run | bash
+  when: pyenv_exists.stat.exists == False
+
+- name: check is pipx installed
+  shell: command -v pipx
+  register: pipx_exists
+  ignore_errors: yes
+
+- name: pipx
+  when: pipx_exists is failed
+  ansible.builtin.pip:
+    name: pipx
+  tags:
+    - pipx
+
+- name: Install poetry
+  become_user: '{{ user }}'
+  community.general.pipx:
+    name: poetry

@@ -1,0 +1,48 @@
+---
+# tasks file for basic settings
+- name: Add ppa for neovim
+  ansible.builtin.apt_repository:
+    repo: 'ppa:neovim-ppa/stable'
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install dotfiles requirements
+  apt: name={{ item }} state=present
+  with_items:
+    - stow
+    - zsh
+    - kitty
+    - neovim
+    - htop
+
+- name: Chown the repo
+  file:
+      path: '/home/{{ user }}/code/dotfiles'
+      recurse: yes
+      state: directory
+      owner: '{{ user }}'
+      group: '{{ user }}'
+
+- name: Clone the latest dotfiles repo
+  become_user: '{{ user }}'
+  git:
+      repo: '{{ dotfiles_repo }}'
+      dest: '/home/{{ user }}/code/dotfiles'
+      recursive: no
+      force: yes
+
+- name: Stow the dotfiles
+  become_user: '{{ user }}'
+  shell:
+      cmd: stow -t ~ -v */
+      chdir: '/home/{{ user }}/code/dotfiles'
+  register: stow_result
+
+- name: Change default bash
+  shell: chsh -s $(which zsh) {{ user }}
+
+- name: Install starship terminal theme
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+

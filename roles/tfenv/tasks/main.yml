@@ -1,0 +1,13 @@
+- name: Install tfenv
+  become_user: '{{ user }}'
+  shell: >
+    git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv
+  args:
+    creates: "/home/{{ user }}/.tfenv/bin/tfenv"
+
+- name: Install kubectl
+  become_user: '{{ user }}'
+  shell: >
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && mv kubectl ~/.local/bin/kubectl && chmod +x ~/.local/bin/kubectl
+  args:
+    creates: "/home/{{ user }}/.local/bin/kubectl"
