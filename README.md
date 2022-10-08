@@ -1,2 +1,13 @@
-# environment-setup-ansible
-my environment setup using ansible
+# environment-setup-ansible  
+My environment setup using ansible
+
+## Pre-requirements  
+some [dotfiles](https://github.com/uelei/dotfiles) repo to be used (using stow)
+change all variables on vars/vars.yml
+
+## To run  
+ 
+The following command is going to ask you BECOME_PASSWORD, it is your password to become sudo
+```bash
+ansible-playbook main.yml -K 
+```
