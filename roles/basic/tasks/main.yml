@@ -2,7 +2,7 @@
 # tasks file for basic settings
 - name: Add ppa for neovim
   ansible.builtin.apt_repository:
-    repo: 'ppa:neovim-ppa/stable'
+    repo: 'ppa:neovim-ppa/unstable'
 
 - name: Run the equivalent of "apt-get update" as a separate step
   ansible.builtin.apt:

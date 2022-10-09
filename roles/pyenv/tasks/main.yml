@@ -57,3 +57,16 @@
   become_user: '{{ user }}'
   community.general.pipx:
     name: poetry
+
+- name: Install ansible-base
+  become_user: '{{ user }}'
+  community.general.pipx:
+    name: ansible-base
+
+- name: inject ansible into pipx ansible-base
+  become_user: '{{ user }}'
+  community.general.pipx:
+    name: ansible-base
+    state: inject
+    inject_packages:
+      - ansible
