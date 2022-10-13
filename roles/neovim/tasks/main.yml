@@ -1,0 +1,17 @@
+- name: Add ppa for neovim
+  ansible.builtin.apt_repository:
+    repo: 'ppa:neovim-ppa/unstable'
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install dotfiles requirements
+  apt: name={{ item }} state=present
+  with_items:
+    - neovim
+
+- name: Install lunarvim
+  become_user: '{{ user }}'
+  shell: export LV_BRANCH=rolling && curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.sh | bash
+
