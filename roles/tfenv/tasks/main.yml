@@ -11,3 +11,14 @@
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && mv kubectl ~/.local/bin/kubectl && chmod +x ~/.local/bin/kubectl
   args:
     creates: "/home/{{ user }}/.local/bin/kubectl"
+
+- name: Install Terraform
+  become_user: '{{ user }}'
+  shell: >
+    tfenv install latest
+
+- name: Set default Terraform
+  become_user: '{{ user }}'
+  shell: >
+    tfenv use latest
+

@@ -11,6 +11,7 @@
     - zsh
     - kitty
     - htop
+    - fzf
 
 - name: Chown the repo
   file:
@@ -25,6 +26,14 @@
   git:
       repo: '{{ dotfiles_repo }}'
       dest: '/home/{{ user }}/code/dotfiles'
+      recursive: no
+      force: yes
+
+- name: Clone the latest get nerd fonts repo
+  become_user: '{{ user }}'
+  git:
+      repo: https://github.com/ronniedroid/getnf.git
+      dest: '/home/{{ user }}/code/get_nerd_font'
       recursive: no
       force: yes
 
