@@ -26,3 +26,8 @@
   args:
     executable: /bin/bash
     creates: "/home/{{ user }}/.gvm/environments/go1.19.2"
+
+- name: Install lazygit
+  become_user: '{{ user }}'
+  shell: >
+    go install github.com/jesseduffield/lazygit@latest
