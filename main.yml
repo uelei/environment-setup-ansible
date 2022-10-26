@@ -1,4 +1,6 @@
 - hosts: all
+  collections:
+    - community.general.homebrew
   become: yes
   user: "{{ user }}"
   vars_files:
