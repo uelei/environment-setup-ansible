@@ -1,12 +1,25 @@
+
+- user:
+    name: '{{ user }}'
+    state: present
+  register: user_registered
+
+- name: check if nvm is installed
+  become_user: '{{ user }}'
+  shell: source {{ user_registered.home }}/.nvm/nvm.sh && command -v nvm
+  register: nvm_exists
+  ignore_errors: true
+
 - name: Install nvm
   become_user: '{{ user }}'
   shell: >
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
   args:
-    creates: "/home/{{ user }}/.nvm/nvm.sh"
+    creates: "{{ user_registered.home }}/.nvm/nvm.sh"
 
 - name: Install node LTS
+  when: nvm_exists is failed
   become_user: '{{ user }}'
-  shell: "source  ~/.nvm/nvm.sh && nvm install --lts" 
+  shell: "source {{ user_registered.home }}/.nvm/nvm.sh && nvm install --lts" 
   args:
     executable: /bin/bash

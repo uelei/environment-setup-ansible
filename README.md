@@ -31,6 +31,7 @@ Currently installing
 ## For MacOs
 
 ```bash
+xcode-select --install
 sudo easy_install pip
 sudo pip install ansible
 ansible-galaxy collection install community.general

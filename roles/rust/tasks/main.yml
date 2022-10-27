@@ -2,7 +2,7 @@
   become_user: '{{ user }}'
   shell: command -v cargo
   register: cargo_exists
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Download Installer
   become_user: '{{ user }}'
@@ -26,7 +26,7 @@
   become_user: '{{ user }}'
   shell: command -v bat
   register: bat_exists
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: install bat
   become_user: '{{ user }}'

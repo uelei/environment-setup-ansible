@@ -54,7 +54,8 @@
       repo: '{{ dotfiles_repo }}'
       dest: '{{ user_registered.home }}/code/dotfiles'
       recursive: no
-      force: yes
+      force: no
+  ignore_errors: true
 
 - name: Clone the latest get nerd fonts repo
   become_user: '{{ user }}'
@@ -70,6 +71,8 @@
       cmd: stow -t ~ -v */
       chdir: '{{ user_registered.home }}/code/dotfiles'
   register: stow_result
+  args:
+    creates: '{{ user_registered.home }}/.config/lvim'
 
 - name: Change default bash
   when: user_registered.shell != "/bin/zsh"
