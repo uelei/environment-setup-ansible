@@ -1,17 +1,35 @@
+
+- user:
+    name: '{{ user }}'
+    state: present
+  register: user_registered
+
 - name: Add ppa for neovim
+  when: ansible_os_family != "Darwin"
   ansible.builtin.apt_repository:
     repo: 'ppa:neovim-ppa/unstable'
 
 - name: Run the equivalent of "apt-get update" as a separate step
+  when: ansible_os_family != "Darwin"
   ansible.builtin.apt:
     update_cache: yes
 
-- name: Install dotfiles requirements
+- name: Install neovim using apt
+  when: ansible_os_family != "Darwin"
   apt: name={{ item }} state=present
   with_items:
     - neovim
 
+- name: Install package mercurial from brew
+  become_user: '{{ user }}'
+  when: ansible_os_family == "Darwin"
+  community.general.homebrew:
+    name: neovim
+    state: present
+
 - name: Install lunarvim
   become_user: '{{ user }}'
   shell: export LV_BRANCH=rolling && curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.sh | bash
+  args:
+    creates: "{{ user_registered.home }}/.local/bin/lvim"
 

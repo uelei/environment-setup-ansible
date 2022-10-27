@@ -1,23 +1,59 @@
+
+- user:
+    name: '{{ user }}'
+    state: present
+  register: user_registered
+
+- name: check if tfenv is installed
+  become_user: '{{ user }}'
+  shell: command -v tfenv
+  register: tfenv_exists
+  ignore_errors: true
+
 - name: Install tfenv
   become_user: '{{ user }}'
   shell: >
     git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv
   args:
-    creates: "/home/{{ user }}/.tfenv/bin/tfenv"
+    creates: "{{ user_registered.home }}/.tfenv/bin/tfenv"
+
+
+- name: check if kubectl is installed
+  become_user: '{{ user }}'
+  shell: command -v kubectl
+  register: kubectl_exists
+  ignore_errors: true
 
 - name: Install kubectl
+  when: ansible_architecture != "arm64"
   become_user: '{{ user }}'
   shell: >
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && mv kubectl ~/.local/bin/kubectl && chmod +x ~/.local/bin/kubectl
   args:
-    creates: "/home/{{ user }}/.local/bin/kubectl"
+    creates: "{{ user_registered.home }}/.local/bin/kubectl"
+
+- name: Install kubectl arm
+  when: ansible_architecture == "arm64"
+  become_user: '{{ user }}'
+  shell: >
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/arm64/kubectl" && mv kubectl ~/.local/bin/kubectl && chmod +x ~/.local/bin/kubectl
+  args:
+    creates: "{{ user_registered.home }}/.local/bin/kubectl"
+
+- name: check if terraform is installed
+  become_user: '{{ user }}'
+  shell: command -v terraform
+  register: terraform_exists
+  ignore_errors: true
 
 - name: Install Terraform
+  when: terraform_exists is failed
   become_user: '{{ user }}'
   shell: >
     tfenv install latest
 
 - name: Set default Terraform
+  when: terraform_exists is failed
   become_user: '{{ user }}'
   shell: >
     tfenv use latest

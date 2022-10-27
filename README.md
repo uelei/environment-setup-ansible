@@ -4,7 +4,6 @@ My environment setup using ansible
 Currently installing
 
 - basic
-  - neovim
   - stow
   - kitty
   - htop
@@ -21,11 +20,22 @@ Currently installing
   - bat
 - tfenv
 - kubectl
+- neovim
 
 
 ## Pre-requirements  
 - [Dotfiles](https://github.com/uelei/dotfiles) repo to be used (using stow)  
 - Change all variables on vars/vars.yml
+    - for macos group is staff on linux is the same as the user
+
+## For MacOs
+
+```bash
+xcode-select --install
+sudo easy_install pip
+sudo pip install ansible
+ansible-galaxy collection install community.general
+```
 
 ## To run  
  

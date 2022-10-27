@@ -1,8 +1,14 @@
 ---
 # tasks file for basic settings
+- user:
+    name: '{{ user }}'
+    state: present
+  register: user_registered
+
 - name: Run the equivalent of "apt-get update" as a separate step
   ansible.builtin.apt:
     update_cache: yes
+  when: ansible_os_family != "Darwin"
 
 - name: Install dotfiles requirements
   apt: name={{ item }} state=present
@@ -12,28 +18,50 @@
     - kitty
     - htop
     - fzf
+  when: ansible_os_family != "Darwin"
+
+- name: Install Brew
+  shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: ansible_os_family == "Darwin"
+  args:
+    creates: "/usr/local/bin/brew"
+
+- name: Install packages from brew
+  become_user: '{{ user }}'
+  when: ansible_os_family == "Darwin"
+  community.general.homebrew:
+    name: stow,fzf 
+    state: present
+
+- name: Install from brew cask
+  become_user: '{{ user }}'
+  when: ansible_os_family == "Darwin"
+  community.general.homebrew_cask:
+    name: kitty
+    state: present
 
 - name: Chown the repo
   file:
-      path: '/home/{{ user }}/code/dotfiles'
+      path: '{{ user_registered.home }}/code/dotfiles'
       recurse: yes
       state: directory
       owner: '{{ user }}'
-      group: '{{ user }}'
+      group: '{{ group }}'
 
 - name: Clone the latest dotfiles repo
   become_user: '{{ user }}'
   git:
       repo: '{{ dotfiles_repo }}'
-      dest: '/home/{{ user }}/code/dotfiles'
+      dest: '{{ user_registered.home }}/code/dotfiles'
       recursive: no
-      force: yes
+      force: no
+  ignore_errors: true
 
 - name: Clone the latest get nerd fonts repo
   become_user: '{{ user }}'
   git:
       repo: https://github.com/ronniedroid/getnf.git
-      dest: '/home/{{ user }}/code/get_nerd_font'
+      dest: '{{ user_registered.home }}/code/get_nerd_font'
       recursive: no
       force: yes
 
@@ -41,12 +69,16 @@
   become_user: '{{ user }}'
   shell:
       cmd: stow -t ~ -v */
-      chdir: '/home/{{ user }}/code/dotfiles'
+      chdir: '{{ user_registered.home }}/code/dotfiles'
   register: stow_result
+  args:
+    creates: '{{ user_registered.home }}/.config/lvim'
 
 - name: Change default bash
+  when: user_registered.shell != "/bin/zsh"
   shell: chsh -s $(which zsh) {{ user }}
 
 - name: Install starship terminal theme
   shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
-
+  args:
+    creates: /usr/local/bin/starship
