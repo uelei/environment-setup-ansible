@@ -37,6 +37,7 @@
   when: pyenv_exists.stat.exists == False and ansible_os_family == "Darwin"
 
 - name: check is pipx installed
+  become_user: '{{ user }}'
   shell: command -v pipx
   register: pipx_exists
   ignore_errors: true
@@ -47,6 +48,7 @@
     name: pipx
 
 - name: check is poetry installed
+  become_user: '{{ user }}'
   shell: command -v poetry
   register: poetry_exists
   ignore_errors: true
@@ -58,6 +60,7 @@
     name: poetry
 
 - name: check is ansible installed
+  become_user: '{{ user }}'
   shell: command -v ansible-playbook
   register: ansible_exists
   ignore_errors: true
@@ -78,6 +81,7 @@
       - ansible
 
 - name: check is commitizen installed
+  become_user: '{{ user }}'
   shell: command -v cz
   register: commitizen_exists
   ignore_errors: true
