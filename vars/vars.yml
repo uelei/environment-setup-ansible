@@ -1,4 +1,4 @@
-user: uelei
-group: staff
+user: wesley-werneck
+group: wesley-werneck
 dotfiles_repo: https://github.com/uelei/dotfiles.git
 private_key: ./uelei_key_2022

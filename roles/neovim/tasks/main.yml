@@ -29,7 +29,7 @@
 
 - name: Install lunarvim
   become_user: '{{ user }}'
-  shell: export LV_BRANCH=rolling && curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.sh | bash
+  shell: curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.sh | bash
   args:
     creates: "{{ user_registered.home }}/.local/bin/lvim"
 

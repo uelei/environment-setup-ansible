@@ -11,13 +11,15 @@
   when: ansible_os_family != "Darwin"
 
 - name: Install dotfiles requirements
-  apt: name={{ item }} state=present
-  with_items:
-    - stow
-    - zsh
-    - kitty
-    - htop
-    - fzf
+  apt:
+    state: present
+    name:
+      - stow
+      - zsh
+      - kitty
+      - htop
+      - fzf
+      - xclip
   when: ansible_os_family != "Darwin"
 
 - name: Install Brew
