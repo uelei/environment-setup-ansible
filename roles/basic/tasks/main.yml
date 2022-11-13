@@ -20,6 +20,7 @@
       - htop
       - fzf
       - xclip
+      - ripgrep
   when: ansible_os_family != "Darwin"
 
 - name: Install Brew
