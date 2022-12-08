@@ -50,11 +50,11 @@
   when: terraform_exists is failed
   become_user: '{{ user }}'
   shell: >
-    tfenv install latest
+    {{ user_registered.home }}/.tfenv/bin/tfenv install latest
 
 - name: Set default Terraform
   when: terraform_exists is failed
   become_user: '{{ user }}'
   shell: >
-    tfenv use latest
+    {{ user_registered.home }}/.tfenv/bin/tfenv use latest
 

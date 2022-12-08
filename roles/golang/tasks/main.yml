@@ -51,4 +51,4 @@
   when: lazygit_exists is failed
   become_user: '{{ user }}'
   shell: >
-    go install github.com/jesseduffield/lazygit@latest
+    export GOPATH={{ user_registered.home }}/.gvm/pkgsets/go1.19.2/global && {{ user_registered.home }}/.gvm/gos/go1.19.2/bin/go install github.com/jesseduffield/lazygit@latest
