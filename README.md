@@ -28,14 +28,21 @@ Currently installing
 - Change all variables on vars/vars.yml
     - for macos group is staff on linux is the same as the user
 
-## For MacOs
+### For MacOs
 
 ```bash
 xcode-select --install
 sudo easy_install pip
-sudo pip install ansible
-ansible-galaxy collection install community.general
 ```
+
+### Install Pre-requirements
+
+
+```bash
+sudo pip install ansible
+ansible-galaxy install -r requirements.yml
+```
+
 
 ## To run  
  

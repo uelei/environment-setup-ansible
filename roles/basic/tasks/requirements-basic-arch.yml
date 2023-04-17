@@ -1,0 +1,8 @@
+
+- name: Install yay arch
+  community.general.pacman:
+    state: present
+    name:
+      - git 
+      - base-devel
+      - yay

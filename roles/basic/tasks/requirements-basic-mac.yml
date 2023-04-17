@@ -1,0 +1,20 @@
+
+- name: Install Brew
+  shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: ansible_os_family == "Darwin"
+  args:
+    creates: "/usr/local/bin/brew"
+
+- name: Install packages from brew
+  become_user: '{{ user }}'
+  when: ansible_os_family == "Darwin"
+  community.general.homebrew:
+    name: stow,fzf 
+    state: present
+
+- name: Install from brew cask
+  become_user: '{{ user }}'
+  when: ansible_os_family == "Darwin"
+  community.general.homebrew_cask:
+    name: kitty
+    state: present

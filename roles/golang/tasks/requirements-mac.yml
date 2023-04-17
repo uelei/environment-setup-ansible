@@ -1,0 +1,7 @@
+
+- name: Install package mercurial from brew
+  become_user: '{{ user }}'
+  when: ansible_os_family == "Darwin"
+  community.general.homebrew:
+    name: mercurial
+    state: present

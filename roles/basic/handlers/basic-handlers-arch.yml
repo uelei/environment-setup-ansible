@@ -1,0 +1,11 @@
+---
+- name: Start sshd with systemd
+  systemd:
+    name: sshd.service
+    state: started
+
+- name: Enable sshd service
+  systemd:
+    name: sshd.service
+    enabled: true
+    masked: no

@@ -1,24 +1,25 @@
 
-- user:
-    name: '{{ user }}'
-    state: present
-  register: user_registered
-
 - name: Add ppa for neovim
-  when: ansible_os_family != "Darwin"
+  when: ansible_pkg_mgr == "apt"
   ansible.builtin.apt_repository:
     repo: 'ppa:neovim-ppa/unstable'
 
 - name: Run the equivalent of "apt-get update" as a separate step
-  when: ansible_os_family != "Darwin"
+  when: ansible_pkg_mgr == "apt"
   ansible.builtin.apt:
     update_cache: yes
 
 - name: Install neovim using apt
-  when: ansible_os_family != "Darwin"
+  when: ansible_pkg_mgr == "apt"
   apt: name={{ item }} state=present
   with_items:
     - neovim
+
+- name: Install neovim Arch
+  when: ansible_pkg_mgr == "pacmnan"
+  community.general.pacman:
+    name: neovim
+    state: present
 
 - name: Install package mercurial from brew
   become_user: '{{ user }}'

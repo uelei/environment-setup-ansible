@@ -1,30 +1,12 @@
 
-- user:
-    name: '{{ user }}'
-    state: present
-  register: user_registered
-# tasks file for gvm
-- name: Run the equivalent of "apt-get update" as a separate step
-  when: ansible_os_family != "Darwin"
-  ansible.builtin.apt:
-    update_cache: yes
+- include_tasks: requirements-debian.yml
+  when: ansible_os_family == 'Debian'
 
-- name: Install pyenv requirements
-  when: ansible_os_family != "Darwin"
-  apt: name={{ item }} state=present
-  with_items:
-    - gcc
-    - bison
-    - build-essential
-    - make
-    - binutils
-
-- name: Install package mercurial from brew
-  become_user: '{{ user }}'
+- include_tasks: requirements-debian.yml
   when: ansible_os_family == "Darwin"
-  community.general.homebrew:
-    name: mercurial
-    state: present
+
+- include_tasks: requirements-arch.yml
+  when: ansible_pkg_mgr == "pacman"
 
 - name: Install gvm
   become_user: '{{ user }}'

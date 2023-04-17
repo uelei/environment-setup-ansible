@@ -1,9 +1,4 @@
 ---
-# tasks file for pyenv
-- user:
-    name: '{{ user }}'
-    state: present
-  register: user_registered
 
 - name: Check if pyenv exists
   ansible.builtin.stat:
@@ -14,12 +9,27 @@
   when: pyenv_exists.stat.exists == False and ansible_os_family != "Darwin"
   ansible.builtin.apt:
     update_cache: yes
+  when: ansible_pkg_mgr == "apt"
 
-- name: Install pyenv requirements
+- name: Install pyenv requirements debian/like
   when: pyenv_exists.stat.exists == False and ansible_os_family != "Darwin"
   apt: 
     state: present
     name: git,make,build-essential,libssl-dev,zlib1g-dev,libbz2-dev,libreadline-dev,libsqlite3-dev,wget,curl,llvm,libncursesw5-dev,xz-utils,tk-dev,libxml2-dev,libxmlsec1-dev,libffi-dev,liblzma-dev,python3-dev,python3-venv,python3-pip
+  when: ansible_pkg_mgr == "apt"
+
+- name: Install pyenv requirements arch
+  when: pyenv_exists.stat.exists == False and ansible_pkg_mgr == "pacman"
+  community.general.pacman:
+    state: present
+    name:
+      - base-devel
+      - openssl
+      - zlib
+      - xz
+      - tk
+      - python-pip
+      - python-setuptools
 
 - name: Install pyenv linux
   become_user: '{{ user }}'
