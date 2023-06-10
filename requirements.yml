@@ -3,3 +3,4 @@ collections:
     - name: community.general
 roles:
     - name: geerlingguy.docker
+    - name: uelei.python_setup_pyenv_pipx_poetry

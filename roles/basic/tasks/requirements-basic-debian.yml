@@ -1,0 +1,5 @@
+- name: Install basic requirements
+  when: ansible_os_family != "Darwin"
+  apt: name={{ item }} state=present
+  with_items:
+    - openssh-server
