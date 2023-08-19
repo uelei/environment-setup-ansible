@@ -16,7 +16,7 @@
     - neovim
 
 - name: Install neovim Arch
-  when: ansible_pkg_mgr == "pacmnan"
+  when: ansible_pkg_mgr == "pacman"
   community.general.pacman:
     name: neovim
     state: present
@@ -27,10 +27,3 @@
   community.general.homebrew:
     name: neovim
     state: present
-
-- name: Install lunarvim
-  become_user: '{{ user }}'
-  shell: curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.sh | bash
-  args:
-    creates: "{{ user_registered.home }}/.local/bin/lvim"
-
