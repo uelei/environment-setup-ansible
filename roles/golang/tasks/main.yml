@@ -18,10 +18,18 @@
 - name: Install go
   become_user: '{{ user }}'
   when: ansible_os_family != "Darwin"
-  shell: source /home/{{ user }}/.gvm/scripts/gvm && gvm install go1.7.1 -B && gvm use go1.7.1 && export GOROOT_BOOTSTRAP=$GOROOT && gvm install go1.19.2 && gvm use go1.19.2 --default
+  shell: source {{ user_registered.home }}/.gvm/bin/gvm && gvm install go1.7.1 -B && gvm use go1.7.1 && export GOROOT_BOOTSTRAP=$GOROOT && gvm install go{{ go_version }} && gvm use go{{ go_version }} --default
   args:
     executable: /bin/bash
-    creates: "{{ user_registered.home }}/.gvm/environments/go1.19.2"
+    creates: "{{ user_registered.home }}/.gvm/environments/go{{ go_version }}"
+
+- name: Install go
+  become_user: '{{ user }}'
+  when: ansible_os_family == "Darwin"
+  shell: source {{ user_registered.home }}/.gvm/bin/gvm && gvm install go{{ go_version }} -B && export GOROOT_BOOTSTRAP=$GOROOT && gvm use go{{ go_version }} --default
+  args:
+    executable: /bin/bash
+    creates: "{{ user_registered.home }}/.gvm/environments/go{{ go_version }}"
 
 - name: check if lazygit is installed
   become_user: '{{ user }}'
@@ -33,4 +41,4 @@
   when: lazygit_exists is failed
   become_user: '{{ user }}'
   shell: >
-    export GOPATH={{ user_registered.home }}/.gvm/pkgsets/go1.19.2/global && {{ user_registered.home }}/.gvm/gos/go1.19.2/bin/go install github.com/jesseduffield/lazygit@latest
+    export GOPATH={{ user_registered.home }}/.gvm/pkgsets/go{{ go_version }}/global && {{ user_registered.home }}/.gvm/gos/go{{ go_version }}/bin/go install github.com/jesseduffield/lazygit@latest

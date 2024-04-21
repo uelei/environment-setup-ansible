@@ -10,6 +10,14 @@
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
   args:
     creates: "{{ user_registered.home }}/.nvm/nvm.sh"
+  when: ansible_os_family != "Darwin"
+
+- name: Install nvm from brew
+  become_user: '{{ user }}'
+  when: ansible_os_family == "Darwin"
+  community.general.homebrew:
+    name: nvm
+    state: present
 
 - name: Install node LTS
   when: nvm_exists is failed

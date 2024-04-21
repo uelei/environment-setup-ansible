@@ -16,4 +16,5 @@
     - role: tfenv
     - role: golang
     - role: neovim
-    - geerlingguy.docker
+    - name: geerlingguy.docker
+      when: ansible_os_family != "Darwin"
