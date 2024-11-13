@@ -1,0 +1,14 @@
+- name: Detects previous installations of asdf
+  command: asdf version > /dev/null
+  register: asdf_check
+  ignore_errors: true
+- name: Download and install asdf
+  block:
+    - name: Clone asdf repository into ~/.asdf
+      ansible.builtin.git:
+        name: https://github.com/asdf-vm/asdf.git
+        dest: ~/.asdf
+        single_branch: yes
+    - name: Add plugin asdf
+      ansible.builtin.shell: "bash -lc 'source /home/{{ user }}/.asdf/asdf.sh && /home/{{ user }}/.asdf/bin/asdf plugin add {{ item.name }}' || true"
+      with_items: "{{ asdf_plugins }}"

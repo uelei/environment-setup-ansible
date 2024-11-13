@@ -1,0 +1,9 @@
+asdf_plugins:
+  - {name: helm, version: latest}
+  - {name: kubectl, version: latest}
+  - {name: golang, version: latest}
+  - {name: k9s, version: latest}
+  - {name: kubectl, version: latest}
+  - {name: rust, version: latest}
+  - {name: terraform, version: latest}
+  - {name: tflint, version: latest}
