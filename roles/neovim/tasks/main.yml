@@ -1,26 +1,21 @@
-
 - name: Add ppa for neovim
-  when: ansible_pkg_mgr == "apt"
+  when: ansible_pkg_mgr == "apt" and ansible_distribution_version is version('20.04', '=<')
   ansible.builtin.apt_repository:
     repo: 'ppa:neovim-ppa/unstable'
-
 - name: Run the equivalent of "apt-get update" as a separate step
   when: ansible_pkg_mgr == "apt"
   ansible.builtin.apt:
-    update_cache: yes
-
-- name: Install neovim using apt
+    update_cache: true
+- name: Install neovim using for debian based systems
   when: ansible_pkg_mgr == "apt"
   apt: name={{ item }} state=present
   with_items:
     - neovim
-
 - name: Install neovim Arch
   when: ansible_pkg_mgr == "pacman"
   community.general.pacman:
     name: neovim
     state: present
-
 - name: Install package mercurial from brew
   become_user: '{{ user }}'
   when: ansible_os_family == "Darwin"

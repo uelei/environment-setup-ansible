@@ -7,8 +7,8 @@
     - name: Clone asdf repository into ~/.asdf
       ansible.builtin.git:
         name: https://github.com/asdf-vm/asdf.git
-        dest: ~/.asdf
-        single_branch: yes
+        dest: '{{ user_registered.home }}/.asdf'
+        single_branch: true
     - name: Add plugin asdf
-      ansible.builtin.shell: "bash -lc 'source /home/{{ user }}/.asdf/asdf.sh && /home/{{ user }}/.asdf/bin/asdf plugin add {{ item.name }}' || true"
+      ansible.builtin.shell: "bash -lc 'source {{ user_registered.home }}/.asdf/asdf.sh && {{ user_registered.home }}/.asdf/bin/asdf plugin add {{ item.name }}  && {{ user_registered.home }}/.asdf/bin/asdf install {{ item.name }} latest' || true"
       with_items: "{{ asdf_plugins }}"

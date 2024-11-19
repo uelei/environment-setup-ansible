@@ -60,7 +60,7 @@
       chdir: '{{ user_registered.home }}/.config/dotfiles'
   register: stow_result
   args:
-    creates: '{{ user_registered.home }}/.config/lvim'
+    creates: '{{ user_registered.home }}/.zshrc'
 
 - name: Change default bash
   when: user_registered.shell != "/bin/zsh"
