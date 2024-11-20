@@ -1,5 +1,5 @@
 - name: Add ppa for neovim
-  when: ansible_pkg_mgr == "apt" and ansible_distribution_version is version('20.04', '=<')
+  when: ansible_pkg_mgr == "apt"
   ansible.builtin.apt_repository:
     repo: 'ppa:neovim-ppa/unstable'
 - name: Run the equivalent of "apt-get update" as a separate step
