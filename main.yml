@@ -7,6 +7,10 @@
     - vars/vars.yml
   vars:
     ansible_ssh_private_key_file: "{{ private_key }}"
+  vars_prompt:
+    - name: delete_old_zsh
+      prompt: "Do you want to delete zshrc? (yes/no)"
+      private: no
   roles:
     - role: basic
     - role: asdf

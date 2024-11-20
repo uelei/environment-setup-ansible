@@ -1,14 +1,10 @@
----
 # tasks file for basic settings
 - include_tasks: requirements-basic-mac.yml
   when: ansible_os_family == "Darwin"
-
 - include_tasks: requirements-basic-debian.yml
   when: ansible_pkg_mgr == "apt"
-
 - include_tasks: requirements-basic-arch.yml
   when: ansible_pkg_mgr == "pacman"
-
 - name: Install dotfiles requirements
   ansible.builtin.package:
     state: present
@@ -22,50 +18,51 @@
       - ripgrep
       - make
   when: ansible_os_family != "Darwin"
-
 - name: Ensure handlers are notified
   meta: flush_handlers
-
 - name: Chown the repo
   file:
-      path: '{{ user_registered.home }}/.config/dotfiles'
-      recurse: yes
-      state: directory
-      owner: '{{ user }}'
-      group: '{{ group }}'
-
+    path: '{{ user_registered.home }}/.config/dotfiles'
+    recurse: yes
+    state: directory
+    owner: '{{ user }}'
+    group: '{{ group }}'
 - name: Clone the latest dotfiles repo
   become_user: '{{ user }}'
   git:
-      repo: '{{ dotfiles_repo }}'
-      dest: '{{ user_registered.home }}/.config/dotfiles'
-      recursive: no
-      force: no
+    repo: '{{ dotfiles_repo }}'
+    dest: '{{ user_registered.home }}/.config/dotfiles'
+    recursive: false
+    force: true
   ignore_errors: true
-
 - name: Clone the latest get nerd fonts repo
   become_user: '{{ user }}'
   git:
-      repo: https://github.com/ronniedroid/getnf.git
-      dest: '{{ user_registered.home }}/.config/get_nerd_font'
-      recursive: no
-      force: yes
-
-# TODO: input para apagar o zsh
-
+    repo: https://github.com/ronniedroid/getnf.git
+    dest: '{{ user_registered.home }}/.config/get_nerd_font'
+    recursive: false
+    force: true
+- name: Remove a old zshrc file
+  when: delete_old_zsh == "yes"
+  file:
+    path: '{{ user_registered.home }}/.zshrc'
+    state: absent
+- name: Remove a old zshenv file
+  when: delete_old_zsh == "yes"
+  file:
+    path: '{{ user_registered.home }}/.zshenv'
+    state: absent
 - name: Stow the dotfiles
   become_user: '{{ user }}'
   shell:
-      cmd: stow -t ~ -v */
-      chdir: '{{ user_registered.home }}/.config/dotfiles'
+    cmd: stow -t ~ -v */
+    chdir: '{{ user_registered.home }}/.config/dotfiles'
   register: stow_result
   args:
     creates: '{{ user_registered.home }}/.zshrc'
-
 - name: Change default bash
   when: user_registered.shell != "/bin/zsh"
   shell: chsh -s $(which zsh) {{ user }}
-
 - name: Install starship terminal theme
   shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
   args:
