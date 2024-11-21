@@ -6,4 +6,5 @@ asdf_plugins:
   - {name: kubectl, version: latest}
   - {name: rust, version: latest}
   - {name: terraform, version: latest}
-  - {name: tflint, version: latest}
+  - {name: nodejs, version: latest}
+  - {name: lazygit, version: latest}

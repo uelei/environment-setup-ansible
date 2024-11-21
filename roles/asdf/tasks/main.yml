@@ -1,4 +1,5 @@
 - name: Detects previous installations of asdf
+  become_user: '{{ user }}'
   stat:
     path: '{{ user_registered.home }}/.asdf'
   register: asdf_check
@@ -6,11 +7,13 @@
 - name: Download and install asdf
   block:
     - name: Clone asdf repository into ~/.asdf
+      become_user: '{{ user }}'
       ansible.builtin.git:
         name: https://github.com/asdf-vm/asdf.git
         dest: '{{ user_registered.home }}/.asdf'
         single_branch: true
     - name: Add plugin asdf
+      become_user: '{{ user }}'
       when: add_asdf_latest_packages == true
       ansible.builtin.shell: "bash -lc 'source {{ user_registered.home }}/.asdf/asdf.sh && {{ user_registered.home }}/.asdf/bin/asdf plugin add {{ item.name }}  && {{ user_registered.home }}/.asdf/bin/asdf install {{ item.name }} latest' || true"
       with_items: "{{ asdf_plugins }}"

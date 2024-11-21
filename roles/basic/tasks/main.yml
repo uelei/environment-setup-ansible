@@ -17,6 +17,7 @@
       - xclip
       - ripgrep
       - make
+      - unzip
   when: ansible_os_family != "Darwin"
 - name: Ensure handlers are notified
   meta: flush_handlers
