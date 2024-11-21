@@ -3,3 +3,4 @@ group: uelei
 dotfiles_repo: https://github.com/uelei/dotfiles.git
 private_key: ./uelei_key_2022
 add_asdf_latest_packages: false
+install_docker: false

@@ -16,4 +16,4 @@
     - role: asdf
     - role: neovim
     - name: geerlingguy.docker
-      when: ansible_os_family != "Darwin"
+      when: ansible_os_family != "Darwin" and install_docker
