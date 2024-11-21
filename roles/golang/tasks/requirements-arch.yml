@@ -1,7 +1,0 @@
-
-- name: Install golang requirements arch
-  # when: pyenv_exists.stat.exists == False and ansible_os_family != "Darwin" and ansible_pkg_mgr == "pacman"
-  community.general.pacman:
-    state: present
-    name:
-      - bison

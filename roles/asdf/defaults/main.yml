@@ -1,0 +1,10 @@
+asdf_plugins:
+  - {name: rust, version: latest}
+  - {name: uv, version: latest}
+  - {name: golang, version: latest}
+  - {name: nodejs, version: latest}
+  - {name: terraform, version: latest}
+  - {name: kubectl, version: latest}
+  - {name: helm, version: latest}
+  - {name: lazygit, version: latest}
+  - {name: k9s, version: latest}

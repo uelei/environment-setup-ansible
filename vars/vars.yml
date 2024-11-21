@@ -1,6 +1,6 @@
 user: uelei
 group: uelei
-ubuntu_dist: focal
 dotfiles_repo: https://github.com/uelei/dotfiles.git
 private_key: ./uelei_key_2022
-go_version: 1.21.0
+add_asdf_latest_packages: false
+install_docker: false
