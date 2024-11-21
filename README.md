@@ -9,18 +9,16 @@ Currently installing
   - kitty
   - htop
   - starship(terminal)
-- pyenv
-  - pipx
-  - poetry
-- gvm
-  - go 1.7.1
-  - go 1.19.2
-- nvm
-  - node lts
-- rust
-  - bat
-- tfenv
-- kubectl
+- asdf
+  - helm
+  - kubectl
+  - golang
+  - k9s
+  - kubectl
+  - rust
+  - terraform
+  - nodejs
+  - lazygit
 - neovim
 
 ## Pre-requirements
@@ -53,3 +51,7 @@ The following command is going to ask you BECOME_PASSWORD, it is your password t
 ```bash
 ansible-playbook main.yml -K
 ```
+
+## To install latest packages for asdf
+
+Set vars/vars.yml the variable `add_asdf_latest_packages` to true
