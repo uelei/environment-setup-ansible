@@ -13,7 +13,7 @@
       private: no
   roles:
     - role: basic
-    - role: asdf
     - role: neovim
     - name: geerlingguy.docker
       when: ansible_os_family != "Darwin" and install_docker
+    - role: mise

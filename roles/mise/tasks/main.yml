@@ -1,0 +1,27 @@
+- name: Find the "mise" command using whereis
+  ansible.builtin.shell: "whereis mise"
+  register: mise_path
+  changed_when: false # Avoid marking the task as changed
+  ignore_errors: yes
+- name: Extract mise the path from whereis output
+  ansible.builtin.set_fact:
+    mise_command_path: "{{ mise_path.stdout.split(':')[1].strip() | default('Not found') }}"
+  when: mise_path.rc == 0 and ':' in mise_path.stdout
+- name: Download and install mise
+  block:
+    - name: Running mise install script
+      become_user: '{{ user }}'
+      ansible.builtin.shell: curl https://mise.run | sh
+      when: ansible_os_family != "Darwin"
+    - name: Running mise install script mac
+      become_user: '{{ user }}'
+      when: ansible_os_family == "Darwin"
+      community.general.homebrew:
+        name: mise
+        state: present
+    - name: Add plugin mise
+      become_user: '{{ user }}'
+      when: add_asdf_latest_packages == true
+      ansible.builtin.shell: "{{ user_registered.home }}/.local/bin/mise global {{ item.name }}@latest "
+      with_items: "{{ asdf_plugins }}"
+  when: mise_command_path == "Not found" or mise_command_path == ""
